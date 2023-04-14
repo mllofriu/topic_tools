@@ -37,7 +37,9 @@ protected:
 
   /// Returns an optional pair <topic type, QoS profile> of the first found source publishing
   /// on `input_topic_` if at least one source is found
-  std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source();
+  std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source(
+    const std::string & input_topic_name
+  );
   virtual void make_subscribe_unsubscribe_decisions();
 
   std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
