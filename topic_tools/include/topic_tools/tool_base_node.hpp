@@ -36,9 +36,9 @@ protected:
   virtual void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) = 0;
 
   /// Returns an optional pair <topic type, QoS profile> of the first found source publishing
-  /// on `input_topic_` if at least one source is found
+  /// on `topic_name` if at least one source is found
   std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source(
-    const std::string & input_topic_name
+    const std::string & topic_name
   );
   virtual void make_subscribe_unsubscribe_decisions();
 
