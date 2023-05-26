@@ -29,9 +29,6 @@ MuxNode::MuxNode(const rclcpp::NodeOptions & options)
   using std::placeholders::_1;
   using std::placeholders::_2;
 
-  input_topic_ = declare_parameter("initial_topic", "");
-  output_topic_ = declare_parameter("output_topic", "~/selected");
-  lazy_ = declare_parameter<bool>("lazy", false);
   input_topics_ = declare_parameter<std::vector<std::string>>("input_topics");
   if (input_topic_.empty()) {
     input_topic_ = input_topics_.front();

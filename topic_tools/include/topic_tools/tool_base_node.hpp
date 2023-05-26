@@ -30,7 +30,9 @@ class ToolBaseNode : public rclcpp::Node
 {
 public:
   TOPIC_TOOLS_PUBLIC
-  ToolBaseNode(const std::string & node_name, const rclcpp::NodeOptions & options);
+  ToolBaseNode(
+    const std::string & node_name,
+    const rclcpp::NodeOptions & options);
 
 protected:
   virtual void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) = 0;

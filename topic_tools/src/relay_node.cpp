@@ -26,8 +26,6 @@ RelayNode::RelayNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("relay", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
-  output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_relay");
-  lazy_ = declare_parameter<bool>("lazy", false);
 
   make_subscribe_unsubscribe_decisions();
 }
