@@ -40,6 +40,10 @@ protected:
   std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source(
     const std::string & topic_name
   );
+  virtual void make_subscribe_unsubscribe_decisions_for_topic(
+    const std::string & topic_name,
+    rclcpp::GenericSubscription::SharedPtr & sub
+  );
   virtual void make_subscribe_unsubscribe_decisions();
 
   std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
