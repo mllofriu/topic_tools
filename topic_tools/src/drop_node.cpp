@@ -26,8 +26,7 @@ DropNode::DropNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("drop", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
-  output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_drop");
-  lazy_ = declare_parameter<bool>("lazy", false);
+
   x_ = declare_parameter<int>("X");
   y_ = declare_parameter<int>("Y");
 
