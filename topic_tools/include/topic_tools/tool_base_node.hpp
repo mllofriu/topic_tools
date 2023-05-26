@@ -46,17 +46,10 @@ protected:
     std::optional<std::string> & topic_type,
     std::optional<rclcpp::QoS> & qos_profile
   );
-  virtual void make_subscribe_unsubscribe_decisions();
 
-  std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
-  std::optional<std::string> topic_type_;
-  std::optional<rclcpp::QoS> qos_profile_;
-  std::string input_topic_;
   std::string output_topic_;
   bool lazy_;
-  rclcpp::TimerBase::SharedPtr discovery_timer_;
   rclcpp::GenericPublisher::SharedPtr pub_;
-  rclcpp::GenericSubscription::SharedPtr sub_;
   std::mutex pub_mutex_;
 };
 }  // namespace topic_tools

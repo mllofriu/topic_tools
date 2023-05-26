@@ -23,6 +23,7 @@ ament_python_install_package(${PROJECT_NAME}
 ament_auto_add_library(relay_node SHARED
   src/relay_node.cpp
   src/tool_base_node.cpp
+  src/tool_base_node_single_sub.cpp
 )
 target_compile_definitions(relay_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 
@@ -39,6 +40,7 @@ target_link_libraries(relay
 ament_auto_add_library(throttle_node SHARED
   src/throttle_node.cpp
   src/tool_base_node.cpp
+  src/tool_base_node_single_sub.cpp
 )
 target_compile_definitions(throttle_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 
@@ -55,6 +57,7 @@ target_link_libraries(throttle
 ament_auto_add_library(drop_node SHARED
   src/drop_node.cpp
   src/tool_base_node.cpp
+  src/tool_base_node_single_sub.cpp
 )
 target_compile_definitions(drop_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 
@@ -71,6 +74,7 @@ target_link_libraries(drop
 ament_auto_add_library(mux_node SHARED
   src/mux_node.cpp
   src/tool_base_node.cpp
+  src/tool_base_node_single_sub.cpp
 )
 target_compile_definitions(mux_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 

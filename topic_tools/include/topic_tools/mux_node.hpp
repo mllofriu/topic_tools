@@ -22,7 +22,7 @@
 #include <vector>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node.hpp"
+#include "topic_tools/tool_base_node_single_sub.hpp"
 #include "topic_tools_interfaces/srv/mux_add.hpp"
 #include "topic_tools_interfaces/srv/mux_delete.hpp"
 #include "topic_tools_interfaces/srv/mux_list.hpp"
@@ -32,7 +32,7 @@ namespace topic_tools
 {
 static const char NONE_TOPIC[] = "__none";
 
-class MuxNode final : public ToolBaseNode
+class MuxNode final : public ToolBaseNodeSingleSub
 {
 public:
   TOPIC_TOOLS_PUBLIC

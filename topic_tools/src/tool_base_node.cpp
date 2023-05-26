@@ -18,7 +18,7 @@
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node.hpp"
+#include "topic_tools/tool_base_node_single_sub.hpp"
 
 namespace topic_tools
 {
@@ -73,12 +73,6 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
     std::scoped_lock lock(pub_mutex_);
     pub_.reset();
   }
-}
-
-void ToolBaseNode::make_subscribe_unsubscribe_decisions()
-{
-  make_subscribe_unsubscribe_decisions_for_topic(
-    input_topic_, sub_, topic_type_, qos_profile_);
 }
 
 std::optional<std::pair<std::string, rclcpp::QoS>> ToolBaseNode::try_discover_source(
