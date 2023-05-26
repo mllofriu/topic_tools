@@ -42,7 +42,9 @@ protected:
   );
   virtual void make_subscribe_unsubscribe_decisions_for_topic(
     const std::string & topic_name,
-    rclcpp::GenericSubscription::SharedPtr & sub
+    rclcpp::GenericSubscription::SharedPtr & sub,
+    std::optional<std::string> & topic_type,
+    std::optional<rclcpp::QoS> & qos_profile
   );
   virtual void make_subscribe_unsubscribe_decisions();
 

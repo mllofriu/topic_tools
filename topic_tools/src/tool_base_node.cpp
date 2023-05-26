@@ -29,18 +29,20 @@ ToolBaseNode::ToolBaseNode(const std::string & node_name, const rclcpp::NodeOpti
 
 void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
   const std::string & topic_name,
-  rclcpp::GenericSubscription::SharedPtr & sub
+  rclcpp::GenericSubscription::SharedPtr & sub,
+  std::optional<std::string> & topic_type,
+  std::optional<rclcpp::QoS> & qos_profile
 )
 {
   if (auto source_info = try_discover_source(topic_name)) {
     // always relay same topic type and QoS profile as the first available source
-    if (!topic_type_ || !qos_profile_ || *topic_type_ != source_info->first ||
-      *qos_profile_ != source_info->second || !pub_)
+    if (!topic_type || !qos_profile || *topic_type != source_info->first ||
+      *qos_profile != source_info->second || !pub_)
     {
-      topic_type_ = source_info->first;
-      qos_profile_ = source_info->second;
+      topic_type = source_info->first;
+      qos_profile = source_info->second;
       std::scoped_lock lock(pub_mutex_);
-      pub_ = this->create_generic_publisher(output_topic_, *topic_type_, *qos_profile_);
+      pub_ = this->create_generic_publisher(output_topic_, *topic_type, *qos_profile);
     }
     // at this point it is certain that our publisher exists
 
@@ -57,7 +59,7 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
       // subscription needs creating if it doesn't exist
       if (!sub) {
         sub = this->create_generic_subscription(
-          topic_name, *topic_type_, *qos_profile_,
+          topic_name, *topic_type, *qos_profile,
           std::bind(&ToolBaseNode::process_message, this, std::placeholders::_1));
       }
     } else {
@@ -75,7 +77,8 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
 
 void ToolBaseNode::make_subscribe_unsubscribe_decisions()
 {
-  make_subscribe_unsubscribe_decisions_for_topic(input_topic_, sub_);
+  make_subscribe_unsubscribe_decisions_for_topic(
+    input_topic_, sub_, topic_type_, qos_profile_);
 }
 
 std::optional<std::pair<std::string, rclcpp::QoS>> ToolBaseNode::try_discover_source(
