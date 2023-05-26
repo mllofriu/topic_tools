@@ -23,7 +23,7 @@ namespace topic_tools
 using namespace std::chrono_literals; // NOLINT
 
 DelayNode::DelayNode(const rclcpp::NodeOptions & options)
-: ToolBaseNode("delay", options), delay_(0ns)
+: ToolBaseNodeSingleSub("delay", options), delay_(0ns)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
   output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_delay");

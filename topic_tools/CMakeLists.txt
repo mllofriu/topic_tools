@@ -104,6 +104,11 @@ target_link_libraries(delay
   delay_node
 )
 
+ament_auto_add_library(priority_mux_node SHARED
+  src/tool_base_node.cpp
+  src/tool_base_node_multi_sub.cpp
+)
+
 if(BUILD_TESTING)
   find_package(std_msgs REQUIRED)
 

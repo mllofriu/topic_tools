@@ -1,4 +1,4 @@
-// Copyright 2022 AIT Austrian Institute of Technology GmbH
+// Copyright 2021 Daisuke Nishimatsu
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TOPIC_TOOLS__DELAY_NODE_HPP_
-#define TOPIC_TOOLS__DELAY_NODE_HPP_
-
-#include <list>
 #include <memory>
+#include <optional> // NOLINT : https://github.com/ament/ament_lint/pull/324
+#include <string>
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node_single_sub.hpp"
-#include "topic_tools/visibility_control.h"
+#include "topic_tools/tool_base_node_multi_sub.hpp"
 
 namespace topic_tools
 {
-class DelayNode final : public ToolBaseNodeSingleSub
+ToolBaseNodeMultiSub::ToolBaseNodeMultiSub(const std::string & node_name, const rclcpp::NodeOptions & options)
+: ToolBaseNode(node_name, options)
 {
-public:
-  TOPIC_TOOLS_PUBLIC
-  explicit DelayNode(const rclcpp::NodeOptions & options);
+}
 
-private:
-  void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) override;
+void ToolBaseNodeMultiSub::make_subscribe_unsubscribe_decisions()
+{
+  for (topic_data& topic_data : topics_data_) {
+    make_subscribe_unsubscribe_decisions_for_topic(
+      topic_data.input_topic, 
+      topic_data.sub,
+      topic_data.topic_type,
+      topic_data.qos_profile
+    );
+  }
+}
 
-  rclcpp::Duration delay_;
-  bool use_wall_clock_;
-  std::list<rclcpp::TimerBase::SharedPtr> timers_;
-};
 }  // namespace topic_tools
-
-#endif  // TOPIC_TOOLS__DELAY_NODE_HPP_
