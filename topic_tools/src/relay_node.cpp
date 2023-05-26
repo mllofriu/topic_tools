@@ -29,10 +29,6 @@ RelayNode::RelayNode(const rclcpp::NodeOptions & options)
   output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_relay");
   lazy_ = declare_parameter<bool>("lazy", false);
 
-  discovery_timer_ = this->create_wall_timer(
-    discovery_period_,
-    std::bind(&RelayNode::make_subscribe_unsubscribe_decisions, this));
-
   make_subscribe_unsubscribe_decisions();
 }
 

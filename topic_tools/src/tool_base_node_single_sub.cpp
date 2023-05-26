@@ -22,7 +22,9 @@
 
 namespace topic_tools
 {
-ToolBaseNodeSingleSub::ToolBaseNodeSingleSub(const std::string & node_name, const rclcpp::NodeOptions & options)
+ToolBaseNodeSingleSub::ToolBaseNodeSingleSub(
+  const std::string & node_name,
+  const rclcpp::NodeOptions & options)
 : ToolBaseNode(node_name, options)
 {
 }

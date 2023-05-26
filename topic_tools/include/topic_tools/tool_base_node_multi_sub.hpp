@@ -19,6 +19,7 @@
 #include <string>
 #include <utility>
 #include <mutex>
+#include <vector>
 
 #include "rclcpp/rclcpp.hpp"
 #include "topic_tools/tool_base_node.hpp"
@@ -26,7 +27,8 @@
 
 namespace topic_tools
 {
-struct topic_data {
+struct topic_data
+{
   std::optional<std::string> topic_type;
   rclcpp::GenericSubscription::SharedPtr sub;
   std::optional<rclcpp::QoS> qos_profile;

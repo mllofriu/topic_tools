@@ -46,10 +46,6 @@ ThrottleNode::ThrottleNode(const rclcpp::NodeOptions & options)
   use_wall_clock_ = declare_parameter("use_wall_clock", false);
   last_time_ = use_wall_clock_ ? rclcpp::Clock{}.now() : this->now();
 
-  discovery_timer_ = this->create_wall_timer(
-    discovery_period_,
-    std::bind(&ThrottleNode::make_subscribe_unsubscribe_decisions, this));
-
   make_subscribe_unsubscribe_decisions();
 }
 

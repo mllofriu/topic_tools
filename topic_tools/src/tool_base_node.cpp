@@ -25,6 +25,9 @@ namespace topic_tools
 ToolBaseNode::ToolBaseNode(const std::string & node_name, const rclcpp::NodeOptions & options)
 : rclcpp::Node(node_name, options)
 {
+  discovery_timer_ = this->create_wall_timer(
+    discovery_period_,
+    std::bind(&ToolBaseNode::make_subscribe_unsubscribe_decisions, this));
 }
 
 void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
@@ -77,7 +80,7 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
 
 std::optional<std::pair<std::string, rclcpp::QoS>> ToolBaseNode::try_discover_source(
   const std::string & input_topic_name
-)
+) const
 {
   // borrowed this from domain bridge
   // (https://github.com/ros2/domain_bridge/blob/main/src/domain_bridge/wait_for_graph_events.hpp)
