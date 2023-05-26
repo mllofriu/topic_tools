@@ -12,33 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TOPIC_TOOLS__DROP_NODE_HPP_
-#define TOPIC_TOOLS__DROP_NODE_HPP_
+#pragma once
 
 #include <memory>
 #include <optional>  // NOLINT : https://github.com/ament/ament_lint/pull/324
 #include <string>
 #include <utility>
+#include <mutex>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node_single_sub.hpp"
+#include "topic_tools/tool_base_node.hpp"
 #include "topic_tools/visibility_control.h"
 
 namespace topic_tools
 {
-class DropNode final : public ToolBaseNodeSingleSub
+class ToolBaseNodeSingleSub : public ToolBaseNode
 {
 public:
   TOPIC_TOOLS_PUBLIC
-  explicit DropNode(const rclcpp::NodeOptions & options);
+  ToolBaseNodeSingleSub(const std::string & node_name, const rclcpp::NodeOptions & options);
 
-private:
-  void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) override;
+protected:
+  virtual void make_subscribe_unsubscribe_decisions();
 
-  int x_;
-  int y_;
-  int count_{0};
+  std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
+  std::optional<std::string> topic_type_;
+  std::optional<rclcpp::QoS> qos_profile_;
+  std::string input_topic_;
+  rclcpp::TimerBase::SharedPtr discovery_timer_;
+  rclcpp::GenericSubscription::SharedPtr sub_;
 };
 }  // namespace topic_tools
-
-#endif  // TOPIC_TOOLS__DROP_NODE_HPP_

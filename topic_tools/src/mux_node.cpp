@@ -24,7 +24,7 @@
 namespace topic_tools
 {
 MuxNode::MuxNode(const rclcpp::NodeOptions & options)
-: ToolBaseNode("mux", options)
+: ToolBaseNodeSingleSub("mux", options)
 {
   using std::placeholders::_1;
   using std::placeholders::_2;
@@ -58,7 +58,7 @@ void MuxNode::make_subscribe_unsubscribe_decisions()
   if (input_topic_ != NONE_TOPIC ||
     std::find(input_topics_.begin(), input_topics_.end(), input_topic_) != input_topics_.end())
   {
-    ToolBaseNode::make_subscribe_unsubscribe_decisions();
+    ToolBaseNodeSingleSub::make_subscribe_unsubscribe_decisions();
   }
 }
 

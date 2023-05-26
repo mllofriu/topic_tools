@@ -12,33 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TOPIC_TOOLS__DROP_NODE_HPP_
-#define TOPIC_TOOLS__DROP_NODE_HPP_
-
 #include <memory>
-#include <optional>  // NOLINT : https://github.com/ament/ament_lint/pull/324
+#include <optional> // NOLINT : https://github.com/ament/ament_lint/pull/324
 #include <string>
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
 #include "topic_tools/tool_base_node_single_sub.hpp"
-#include "topic_tools/visibility_control.h"
 
 namespace topic_tools
 {
-class DropNode final : public ToolBaseNodeSingleSub
+ToolBaseNodeSingleSub::ToolBaseNodeSingleSub(const std::string & node_name, const rclcpp::NodeOptions & options)
+: ToolBaseNode(node_name, options)
 {
-public:
-  TOPIC_TOOLS_PUBLIC
-  explicit DropNode(const rclcpp::NodeOptions & options);
+}
 
-private:
-  void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) override;
+void ToolBaseNodeSingleSub::make_subscribe_unsubscribe_decisions()
+{
+  make_subscribe_unsubscribe_decisions_for_topic(
+    input_topic_, sub_, topic_type_, qos_profile_);
+}
 
-  int x_;
-  int y_;
-  int count_{0};
-};
 }  // namespace topic_tools
-
-#endif  // TOPIC_TOOLS__DROP_NODE_HPP_

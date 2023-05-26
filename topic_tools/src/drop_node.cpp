@@ -23,7 +23,7 @@
 namespace topic_tools
 {
 DropNode::DropNode(const rclcpp::NodeOptions & options)
-: ToolBaseNode("drop", options)
+: ToolBaseNodeSingleSub("drop", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
   output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_drop");

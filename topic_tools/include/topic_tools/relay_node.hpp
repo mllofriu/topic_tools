@@ -21,12 +21,12 @@
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node.hpp"
+#include "topic_tools/tool_base_node_single_sub.hpp"
 #include "topic_tools/visibility_control.h"
 
 namespace topic_tools
 {
-class RelayNode final : public ToolBaseNode
+class RelayNode final : public ToolBaseNodeSingleSub
 {
 public:
   TOPIC_TOOLS_PUBLIC
