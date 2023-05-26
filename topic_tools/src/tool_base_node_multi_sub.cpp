@@ -22,16 +22,18 @@
 
 namespace topic_tools
 {
-ToolBaseNodeMultiSub::ToolBaseNodeMultiSub(const std::string & node_name, const rclcpp::NodeOptions & options)
+ToolBaseNodeMultiSub::ToolBaseNodeMultiSub(
+  const std::string & node_name,
+  const rclcpp::NodeOptions & options)
 : ToolBaseNode(node_name, options)
 {
 }
 
 void ToolBaseNodeMultiSub::make_subscribe_unsubscribe_decisions()
 {
-  for (topic_data& topic_data : topics_data_) {
+  for (topic_data & topic_data : topics_data_) {
     make_subscribe_unsubscribe_decisions_for_topic(
-      topic_data.input_topic, 
+      topic_data.input_topic,
       topic_data.sub,
       topic_data.topic_type,
       topic_data.qos_profile

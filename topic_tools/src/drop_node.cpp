@@ -31,10 +31,6 @@ DropNode::DropNode(const rclcpp::NodeOptions & options)
   x_ = declare_parameter<int>("X");
   y_ = declare_parameter<int>("Y");
 
-  discovery_timer_ = this->create_wall_timer(
-    discovery_period_,
-    std::bind(&DropNode::make_subscribe_unsubscribe_decisions, this));
-
   make_subscribe_unsubscribe_decisions();
 }
 

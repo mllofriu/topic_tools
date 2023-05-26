@@ -35,22 +35,28 @@ public:
 protected:
   virtual void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) = 0;
 
-  /// Returns an optional pair <topic type, QoS profile> of the first found source publishing
-  /// on `topic_name` if at least one source is found
-  std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source(
-    const std::string & topic_name
-  );
   virtual void make_subscribe_unsubscribe_decisions_for_topic(
     const std::string & topic_name,
     rclcpp::GenericSubscription::SharedPtr & sub,
     std::optional<std::string> & topic_type,
     std::optional<rclcpp::QoS> & qos_profile
   );
+  virtual void make_subscribe_unsubscribe_decisions() = 0;
 
   std::string output_topic_;
   bool lazy_;
   rclcpp::GenericPublisher::SharedPtr pub_;
   std::mutex pub_mutex_;
+
+private:
+  /// Returns an optional pair <topic type, QoS profile> of the first found source publishing
+  /// on `topic_name` if at least one source is found
+  std::optional<std::pair<std::string, rclcpp::QoS>> try_discover_source(
+    const std::string & topic_name
+  ) const;
+
+  std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
+  rclcpp::TimerBase::SharedPtr discovery_timer_;
 };
 }  // namespace topic_tools
 

@@ -37,10 +37,6 @@ MuxNode::MuxNode(const rclcpp::NodeOptions & options)
     input_topic_ = input_topics_.front();
   }
 
-  discovery_timer_ = this->create_wall_timer(
-    discovery_period_,
-    std::bind(&MuxNode::make_subscribe_unsubscribe_decisions, this));
-
   make_subscribe_unsubscribe_decisions();
 
   mux_add_srv_ = create_service<topic_tools_interfaces::srv::MuxAdd>(

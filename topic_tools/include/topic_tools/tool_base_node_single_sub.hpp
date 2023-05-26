@@ -30,16 +30,17 @@ class ToolBaseNodeSingleSub : public ToolBaseNode
 {
 public:
   TOPIC_TOOLS_PUBLIC
-  ToolBaseNodeSingleSub(const std::string & node_name, const rclcpp::NodeOptions & options);
+  ToolBaseNodeSingleSub(
+    const std::string & node_name,
+    const rclcpp::NodeOptions & options);
 
 protected:
   virtual void make_subscribe_unsubscribe_decisions();
 
-  std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
   std::optional<std::string> topic_type_;
   std::optional<rclcpp::QoS> qos_profile_;
   std::string input_topic_;
-  rclcpp::TimerBase::SharedPtr discovery_timer_;
+
   rclcpp::GenericSubscription::SharedPtr sub_;
 };
 }  // namespace topic_tools
