@@ -27,9 +27,12 @@ ToolBaseNode::ToolBaseNode(const std::string & node_name, const rclcpp::NodeOpti
 {
 }
 
-void ToolBaseNode::make_subscribe_unsubscribe_decisions()
+void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
+  const std::string & topic_name,
+  rclcpp::GenericSubscription::SharedPtr & sub
+)
 {
-  if (auto source_info = try_discover_source(input_topic_)) {
+  if (auto source_info = try_discover_source(topic_name)) {
     // always relay same topic type and QoS profile as the first available source
     if (!topic_type_ || !qos_profile_ || *topic_type_ != source_info->first ||
       *qos_profile_ != source_info->second || !pub_)
@@ -46,20 +49,20 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions()
       pub_->get_subscription_count() + pub_->get_intra_process_subscription_count() > 0)
     {
       // subscription exists already but needs changing if input_topic_ changes
-      if (sub_ &&
-        sub_->get_topic_name() != get_node_topics_interface()->resolve_topic_name(input_topic_))
+      if (sub &&
+        sub->get_topic_name() != get_node_topics_interface()->resolve_topic_name(topic_name))
       {
-        sub_.reset();
+        sub.reset();
       }
       // subscription needs creating if it doesn't exist
-      if (!sub_) {
-        sub_ = this->create_generic_subscription(
-          input_topic_, *topic_type_, *qos_profile_,
+      if (!sub) {
+        sub = this->create_generic_subscription(
+          topic_name, *topic_type_, *qos_profile_,
           std::bind(&ToolBaseNode::process_message, this, std::placeholders::_1));
       }
     } else {
       // Lazy and no subscriber doesn't need to subscribe
-      sub_.reset();
+      sub.reset();
     }
   } else {
     // we don't have any source to republish, so we don't need a publisher
@@ -68,6 +71,11 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions()
     std::scoped_lock lock(pub_mutex_);
     pub_.reset();
   }
+}
+
+void ToolBaseNode::make_subscribe_unsubscribe_decisions()
+{
+  make_subscribe_unsubscribe_decisions_for_topic(input_topic_, sub_);
 }
 
 std::optional<std::pair<std::string, rclcpp::QoS>> ToolBaseNode::try_discover_source(
