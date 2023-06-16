@@ -26,9 +26,10 @@ TEST_F(TestTopicToolSingleSub, MessagesAreEffectivelyDropped) {
   auto options = rclcpp::NodeOptions{};
   options.append_parameter_override("input_topic", get_target_input_topic());
   options.append_parameter_override("output_topic", get_target_output_topic());
-  // Drop 1 every two messages
-  options.append_parameter_override("X", 1);
-  options.append_parameter_override("Y", 2);
+  constexpr int drop_n_msgs = 1;
+  constexpr int out_of_n_msgs = 2;
+  options.append_parameter_override("X", drop_n_msgs);
+  options.append_parameter_override("Y", out_of_n_msgs);
   auto target_node = std::make_shared<topic_tools::DropNode>(options);
 
   int published_msgs = 0;

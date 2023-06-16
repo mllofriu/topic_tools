@@ -30,9 +30,6 @@ DelayNode::DelayNode(const rclcpp::NodeOptions & options)
   delay_ = rclcpp::Duration::from_seconds(declare_parameter("delay", 0.0));
   use_wall_clock_ = declare_parameter("use_wall_clock", false);
 
-  discovery_timer_ = this->create_wall_timer(
-    discovery_period_,
-    std::bind(&DelayNode::make_subscribe_unsubscribe_decisions, this));
   make_subscribe_unsubscribe_decisions();
 }
 
