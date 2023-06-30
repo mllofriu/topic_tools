@@ -34,6 +34,9 @@ MuxNode::MuxNode(const rclcpp::NodeOptions & options)
     input_topic_ = input_topics_.front();
   }
 
+  // Override output topic's name with this node's preference
+  output_topic_ = declare_parameter<std::string>("output_topic", "~/selected");
+
   make_subscribe_unsubscribe_decisions();
 
   mux_add_srv_ = create_service<topic_tools_interfaces::srv::MuxAdd>(

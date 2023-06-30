@@ -26,6 +26,7 @@ DelayNode::DelayNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("delay", options), delay_(0ns)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
+  // Override output topic's name with this node's preference
   output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_delay");
   delay_ = rclcpp::Duration::from_seconds(declare_parameter("delay", 0.0));
   use_wall_clock_ = declare_parameter("use_wall_clock", false);

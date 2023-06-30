@@ -27,6 +27,8 @@ ThrottleNode::ThrottleNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("throttle", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
+  // Override output topic's name with this node's preference
+  output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_throttle");
 
   const std::string throttle_type_str = declare_parameter<std::string>("throttle_type");
   if (throttle_type_str == "messages") {

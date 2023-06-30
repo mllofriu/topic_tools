@@ -25,10 +25,9 @@ namespace topic_tools
 ToolBaseNode::ToolBaseNode(
   const std::string & node_name,
   const rclcpp::NodeOptions & options)
-: rclcpp::Node(node_name, options)
+: rclcpp::Node(node_name, options), output_topic_("~/output")
 {
   lazy_ = declare_parameter<bool>("lazy", false);
-  output_topic_ = declare_parameter<std::string>("output_topic", "~output");
 
   discovery_timer_ = this->create_wall_timer(
     discovery_period_,

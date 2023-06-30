@@ -26,7 +26,8 @@ DropNode::DropNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("drop", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
-
+  // Override output topic's name with this node's preference
+  output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_drop");
   x_ = declare_parameter<int>("X");
   y_ = declare_parameter<int>("Y");
 

@@ -26,6 +26,8 @@ RelayNode::RelayNode(const rclcpp::NodeOptions & options)
 : ToolBaseNodeSingleSub("relay", options)
 {
   input_topic_ = declare_parameter<std::string>("input_topic");
+  // Override output topic's name with this node's preference
+  output_topic_ = declare_parameter<std::string>("output_topic", input_topic_ + "_relay");
 
   make_subscribe_unsubscribe_decisions();
 }
