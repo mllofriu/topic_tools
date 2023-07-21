@@ -91,6 +91,7 @@ target_link_libraries(mux
 ament_auto_add_library(delay_node SHARED
   src/delay_node.cpp
   src/tool_base_node.cpp
+  src/tool_base_node_single_sub.cpp
 )
 target_compile_definitions(delay_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 
@@ -105,8 +106,21 @@ target_link_libraries(delay
 )
 
 ament_auto_add_library(priority_mux_node SHARED
+  src/priority_mux_node.cpp
   src/tool_base_node.cpp
   src/tool_base_node_multi_sub.cpp
+)
+
+target_compile_definitions(priority_mux_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
+
+rclcpp_components_register_nodes(priority_mux_node "topic_tools::PriorityMuxNode")
+
+ament_auto_add_executable(priority_mux
+  src/priority_mux.cpp
+)
+
+target_link_libraries(priority_mux
+  priority_mux_node
 )
 
 if(BUILD_TESTING)
@@ -157,6 +171,18 @@ if(BUILD_TESTING)
 
   target_link_libraries(test_mux
     mux_node
+    rclcpp::rclcpp
+    ${std_msgs_TARGETS}
+  )
+
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_priority_mux test/test_priority_mux.cpp)
+  target_include_directories(test_priority_mux PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  target_link_libraries(test_priority_mux
+  priority_mux_node
     rclcpp::rclcpp
     ${std_msgs_TARGETS}
   )
