@@ -33,7 +33,11 @@ public:
   explicit PriorityMuxNode(const rclcpp::NodeOptions & options);
 
 private:
-  void process_message(std::shared_ptr<rclcpp::SerializedMessage> msg) override;
+  void process_message(std::string topic_name, std::shared_ptr<rclcpp::SerializedMessage> msg) override;
+
+  std::optional<int> current_topic_index_;
+  rclcpp::Time last_received_;
+  std::mutex mutex_;
 };
 
 }  // namespace topic_tools

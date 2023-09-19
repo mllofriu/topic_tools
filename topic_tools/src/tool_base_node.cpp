@@ -67,7 +67,7 @@ void ToolBaseNode::make_subscribe_unsubscribe_decisions_for_topic(
       if (!sub) {
         sub = this->create_generic_subscription(
           topic_name, *topic_type, *qos_profile,
-          std::bind(&ToolBaseNode::process_message, this, std::placeholders::_1));
+          std::bind(&ToolBaseNode::process_message, this, topic_name, std::placeholders::_1));
       }
     } else {
       // Lazy and no subscriber doesn't need to subscribe

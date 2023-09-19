@@ -42,9 +42,14 @@ PriorityMuxNode::PriorityMuxNode(const rclcpp::NodeOptions & options)
   make_subscribe_unsubscribe_decisions();
 }
 
-void PriorityMuxNode::process_message(std::shared_ptr<rclcpp::SerializedMessage> msg)
+void PriorityMuxNode::process_message(std::string topic_name, std::shared_ptr<rclcpp::SerializedMessage> msg)
 {
+  // Get the topic index
+  // Check whether there's an active and higher priority topic
+    // return
+  // republish the message
   pub_->publish(*msg);
+  // update the active topic and time
 }
 
 }  // namespace topic_tools

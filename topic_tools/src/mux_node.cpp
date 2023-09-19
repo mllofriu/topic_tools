@@ -58,7 +58,7 @@ void MuxNode::make_subscribe_unsubscribe_decisions()
   }
 }
 
-void MuxNode::process_message(std::shared_ptr<rclcpp::SerializedMessage> msg)
+void MuxNode::process_message(std::string topic_name, std::shared_ptr<rclcpp::SerializedMessage> msg)
 {
   pub_->publish(*msg);
 }
