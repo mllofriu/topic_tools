@@ -44,12 +44,22 @@ PriorityMuxNode::PriorityMuxNode(const rclcpp::NodeOptions & options)
 
 void PriorityMuxNode::process_message(std::string topic_name, std::shared_ptr<rclcpp::SerializedMessage> msg)
 {
-  // Get the topic index
+  // Get the topic priority
+  int prio = get_topic_index(topic_name);
+  assert(prio != -1 and "The topic was not found in the expected list of topics");
+
   // Check whether there's an active and higher priority topic
-    // return
+  if (current_topic_index_
+    and *current_topic_index_ < prio
+    and last_received_ < rclcpp::Clock{}.now() + rclcpp::Duration(1.0f) ){ // Change for constant
+    return;
+  }
+
   // republish the message
   pub_->publish(*msg);
   // update the active topic and time
+  current_topic_index_ = prio;
+  last_received_ = rclcpp::Clock{}.now();
 }
 
 }  // namespace topic_tools

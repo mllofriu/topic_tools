@@ -43,7 +43,7 @@ public:
 
 protected:
   virtual void make_subscribe_unsubscribe_decisions();
-
+  int get_topic_index(const std::string& topic_name);
   std::vector<topic_data> topics_data_;
 
   std::chrono::duration<float> discovery_period_ = std::chrono::milliseconds{100};
