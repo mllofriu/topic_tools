@@ -110,18 +110,39 @@ ament_auto_add_library(priority_mux_node SHARED
   src/tool_base_node.cpp
   src/tool_base_node_multi_sub.cpp
 )
+ament_auto_add_library(priority_mux_node_inhibitor SHARED
+  src/priority_mux_node_inhibitor.cpp
+)
 
 target_compile_definitions(priority_mux_node PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
+target_compile_definitions(priority_mux_node_inhibitor PRIVATE "TOPIC_TOOLS_BUILDING_LIBRARY")
 
 rclcpp_components_register_nodes(priority_mux_node "topic_tools::PriorityMuxNode")
+rclcpp_components_register_nodes(priority_mux_node_inhibitor "topic_tools::PriorityMuxNodeInhibitor")
 
 ament_auto_add_executable(priority_mux
   src/priority_mux.cpp
+)
+ament_auto_add_executable(priority_mux_inhibitor
+  src/priority_mux_inhibitor.cpp
 )
 
 target_link_libraries(priority_mux
   priority_mux_node
 )
+target_link_libraries(priority_mux_inhibitor
+  priority_mux_node_inhibitor
+)
+
+install(TARGETS
+  priority_mux_node
+  priority_mux_node_inhibitor
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS
+  priority_mux
+  priority_mux_inhibitor
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(std_msgs REQUIRED)
@@ -183,6 +204,17 @@ if(BUILD_TESTING)
   )
   target_link_libraries(test_priority_mux
   priority_mux_node
+    rclcpp::rclcpp
+    ${std_msgs_TARGETS}
+  )
+
+  ament_add_gtest(test_priority_mux_inhibitor test/test_priority_mux_inhibitor.cpp)
+  target_include_directories(test_priority_mux_inhibitor PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  target_link_libraries(test_priority_mux_inhibitor
+  priority_mux_node_inhibitor
     rclcpp::rclcpp
     ${std_msgs_TARGETS}
   )

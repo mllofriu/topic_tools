@@ -41,13 +41,13 @@ void ToolBaseNodeMultiSub::make_subscribe_unsubscribe_decisions()
   }
 }
 
-int ToolBaseNodeMultiSub::get_topic_index(const std::string& topic_name)
+int ToolBaseNodeMultiSub::get_topic_index(const std::string & topic_name)
 {
   int index = -1;
-  for (int i = 0; i < topics_data_.size(); i++) {
-    const topic_data& td = topics_data_[i];
+  for (size_t i = 0; i < topics_data_.size(); i++) {
+    const topic_data & td = topics_data_[i];
     if (td.input_topic == topic_name) {
-      index = i; 
+      index = i;
     }
   }
   return index;

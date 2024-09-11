@@ -17,24 +17,26 @@
 #include <vector>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/priority_mux_node.hpp"
+#include "topic_tools/priority_mux_node_inhibitor.hpp"
 
-/****************************
- * priority_mux entry point *
- * **************************
+/**************************************
+ * priority_mux inhibitor entry point *
+ * ************************************
  * Parameters:
  *    - time_window (REQUIRED):
  *        Specifies the time (in milliseconds) during which the effect specified in [type] will take effect.
  *    - output_topic (REQUIRED):
  *        Specifies the name of the output topic where the mux republish the messages.
+ *          - The inhibitor mux only republish on this topic for the inhibited topic (if the time window is not active).
  *    - input_topics (REQUIRED):
  *        Specifies a vector containing the list of input topics.
  *        The order matters. Ordered from highest to lowest priority.
  * Execution example:
- *    ~ ros2 run topic_tools priority_mux --ros-args -p time_window:=3000 -p output_topic:="/prioritized" -p input_topics:="['/topic_a', '/topic_b']"
+ *    ~ ros2 run topic_tools priority_mux_inhibitor --ros-args -p time_window:=3000 -p output_topic:="/prioritized" -p input_topics:="['/topic_a', '/topic_b']"
  *        Here:
  *          time_window is 3 seconds.
  *          '/topic_a' will have more priority than '/topic_b'.
+ *          the node publishing on '/topic_a' inhibits the node publishing on '/topic_b' for 3 seconds
  *************************************************************/
 
 int main(int argc, char * argv[])
@@ -50,7 +52,7 @@ int main(int argc, char * argv[])
       std::vector<std::string>{args.begin() + 3, args.end()});
   }
 
-  auto node = std::make_shared<topic_tools::PriorityMuxNode>(options);
+  auto node = std::make_shared<topic_tools::PriorityMuxNodeInhibitor>(options);
 
   rclcpp::spin(node);
   rclcpp::shutdown();

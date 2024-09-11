@@ -35,7 +35,10 @@ public:
     const rclcpp::NodeOptions & options);
 
 protected:
-  virtual void process_message(std::string topic_name, std::shared_ptr<rclcpp::SerializedMessage> msg) = 0;
+  virtual void process_message(
+    std::string topic_name,
+    std::shared_ptr<rclcpp::SerializedMessage> msg
+  ) = 0;
 
   virtual void make_subscribe_unsubscribe_decisions_for_topic(
     const std::string & topic_name,

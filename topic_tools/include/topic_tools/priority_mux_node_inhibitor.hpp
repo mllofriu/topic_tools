@@ -21,43 +21,38 @@
 #include <vector>
 
 #include "rclcpp/rclcpp.hpp"
-#include "topic_tools/tool_base_node_multi_sub.hpp"
+#include "topic_tools/priority_mux_node.hpp"
 
 /**
  * @brief Multiplexer for generic topic types based on priorities.
+ * It implements a inhibition mechanism based on the subsumption architecture.
  */
 
 namespace topic_tools
 {
 
-class PriorityMuxNode : public ToolBaseNodeMultiSub
+class PriorityMuxNodeInhibitor final : public PriorityMuxNode
 {
 public:
   TOPIC_TOOLS_PUBLIC
-  explicit PriorityMuxNode(const rclcpp::NodeOptions & options);
+  explicit PriorityMuxNodeInhibitor(const rclcpp::NodeOptions & options);
 
   // Explicitly define a noexcept destructor
-  ~PriorityMuxNode() noexcept override = default;
+  ~PriorityMuxNodeInhibitor() noexcept override = default;
 
 private:
   /**
    * @brief Processes incoming messages and handles them based on their priority.
+   * A message will be republished only if it is from the lowest priority topic
+   * or there is no active higher priority message within the time window.
    * @param topic_name The name of the topic the message was received from.
    * @param msg The received message.
    */
   void process_message(
     std::string topic_name,
     std::shared_ptr<rclcpp::SerializedMessage> msg) override;
-
-protected:
-  bool skip_message(const int topic_prio);
-  // The index (priority) of the previous topic
-  std::optional<int> prev_topic_index_;
-  // The timestamp of the last received topic
-  rclcpp::Time last_received_;
-  // The time during the mechanism will take effect
-  rclcpp::Duration time_window_duration_;
-  std::mutex mutex_;
+  // The greatest priority value. It corresponds to the lowest priority
+  int greatest_priority_value_;
 };
 
 }  // namespace topic_tools

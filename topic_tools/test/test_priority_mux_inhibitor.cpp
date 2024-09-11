@@ -1,5 +1,3 @@
-// Copyright 2023 Martin Llofriu
-//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -19,10 +17,10 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include "topic_tools/priority_mux_node.hpp"
+#include "topic_tools/priority_mux_node_inhibitor.hpp"
 #include "test_topic_tool.hpp"
 
-class PriorityMuxTest : public TestTopicToolMultiSub
+class PriorityMuxInhibitorTest : public TestTopicToolMultiSub
 {
 public:
   void SetUp()
@@ -33,7 +31,7 @@ public:
     options.append_parameter_override("time_window", 1000);
     options.append_parameter_override("output_topic", get_target_output_topic());
     options.append_parameter_override("input_topics", get_target_input_topics());
-    target_node_ = std::make_shared<topic_tools::PriorityMuxNode>(options);
+    target_node_ = std::make_shared<topic_tools::PriorityMuxNodeInhibitor>(options);
 
     std::function<void(const std_msgs::msg::String::SharedPtr)> validator =
       [](const std_msgs::msg::String::SharedPtr msg) {
@@ -53,21 +51,22 @@ private:
   std::shared_ptr<rclcpp::Node> target_node_;
 };
 
-TEST_F(PriorityMuxTest, MessagesToHighestPriorityTopicArrives) {
-  publish_and_check("not dropped", 0);
+TEST_F(PriorityMuxInhibitorTest, MessagesFromInhibitedTopicArrivesButInhibitionHasStoppedOrItHasNotStartedYet) {
+  int inhibited_index = static_cast<int>(get_target_input_topics().size()) - 1;
+  publish_and_check("not dropped", inhibited_index);
 
   ASSERT_EQ(get_received_msgs(), 1);
 }
 
-TEST_F(PriorityMuxTest, MessagesToNonPriorityTopicArriveIfNoOtherTopicsAreThere) {
-  publish_and_check("not dropped", 1);
+TEST_F(PriorityMuxInhibitorTest, MessagesToHighestPriorityTopicArrivesButItsAnInhibitionMessage) {
+  publish_and_check("dropped", 0);
 
-  ASSERT_EQ(get_received_msgs(), 1);
+  ASSERT_EQ(get_received_msgs(), 0);
 }
 
-TEST_F(PriorityMuxTest, MessagesToNonPriorityTopicDontArriveIfHigherPrioTopicsArePublishedBefore) {
-  publish_and_check("not dropped", 0);
+TEST_F(PriorityMuxInhibitorTest, MessagesToNonPriorityTopicDontArriveIfHigherPrioTopicsArePublishedBefore) {
+  publish_and_check("dropped", 0);
   publish_and_check("dropped", 1);
 
-  ASSERT_EQ(get_received_msgs(), 1);
+  ASSERT_EQ(get_received_msgs(), 0);
 }
